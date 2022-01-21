@@ -1,6 +1,6 @@
-package org.jetbrains.plugins.template.services
+package com.github.zzehring.intellijjsonnet.services
 
-import org.jetbrains.plugins.template.MyBundle
+import com.github.zzehring.intellijjsonnet.MyBundle
 
 class MyApplicationService {
 
