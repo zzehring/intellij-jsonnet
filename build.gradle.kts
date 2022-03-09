@@ -1,5 +1,6 @@
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -7,13 +8,15 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
     // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.3.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
+    // Kotlin Serializer Plugin
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 }
 
 group = properties("pluginGroup")
@@ -28,7 +31,13 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.ballerina-platform:lsp4intellij:0.94.2")
+    implementation("io.ktor:ktor-client-core:1.6.7")
+    implementation("io.ktor:ktor-client-cio:1.6.7")
+    implementation("net.swiftzer.semver:semver:1.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+    implementation("io.ktor:ktor-client-serialization:1.6.7")
+    implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
+    implementation("com.github.ballerina-platform:lsp4intellij:8ee2b55267da684fb55d2866ad3293e8a0a21977")
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
