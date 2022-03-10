@@ -45,6 +45,18 @@
         <applicationService serviceImplementation="com.github.zzehring.intellijjsonnet.settings.JLSSettingsStateComponent"/>
         <applicationConfigurable parentId="tools" instance="com.github.zzehring.intellijjsonnet.settings.JLSSettingsConfigurable"/>
 
+        <!-- custom language stuff and things -->
+        <fileType name="Jsonnet File"
+                  implementationClass="com.github.zzehring.intellijjsonnet.JsonnetFileType"
+                  fieldName="INSTANCE"
+                  language="Jsonnet"
+                  extensions="jsonnet;libsonnet"/>
+        <lang.parserDefinition language="Jsonnet"
+                               implementationClass="com.github.zzehring.intellijjsonnet.JsonnetParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Jsonnet"
+                                       implementationClass="com.github.zzehring.intellijjsonnet.JsonnetSyntaxHighlighterFactory"/>
+        <lang.foldingBuilder language="Jsonnet"
+                             implementationClass="com.github.zzehring.intellijjsonnet.JsonnetFoldingBuilder"/>
     </extensions>
 
     <applicationListeners>
