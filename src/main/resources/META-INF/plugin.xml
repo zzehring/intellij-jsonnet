@@ -76,5 +76,10 @@
         <action class="org.wso2.lsp4intellij.actions.LSPReferencesAction" id="LSPFindUsages">
             <keyboard-shortcut first-keystroke="shift alt F7" keymap="$default"/>
         </action>
+        <action id="com.github.zzehring.intellijjsonnet.actions.EvaluateJsonnetAction"
+                class="com.github.zzehring.intellijjsonnet.actions.EvaluateJsonnetAction" text="Evaluate Jsonnet File"
+                description="This action evaluates the current jsonnet file ">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
