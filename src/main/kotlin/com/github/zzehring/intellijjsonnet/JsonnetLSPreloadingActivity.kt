@@ -62,7 +62,7 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
         val repoInfo = getLatestReleaseInfo(httpClient, releaseURL, platform, arch)
         LOG.info("Latest tag: ${repoInfo.tag} ; Download URL: ${repoInfo.downloadUrl}")
 
-        val binFile = File(PathManager.getPluginsPath().plus("/intellij-jsonnet/jsonnet-language-server"))
+        val binFile = File(PathManager.getPluginsPath().plus("/Jsonnet Language Server/jsonnet-language-server"))
 
         // Check if LS binary already exists. If it does and the latest release is a higher version, prompt user to update
         // If binary doesn't exist, download latest
