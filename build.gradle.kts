@@ -114,6 +114,10 @@ tasks {
         systemProperty("jb.consents.confirmation.enabled", "false")
     }
 
+    runIde {
+        autoReloadPlugins.set(false)
+    }
+
     signPlugin {
         certificateChain.set(File(System.getenv("CERTIFICATE_CHAIN") ?: "./certs/chain.crt").readText(Charsets.UTF_8))
         privateKey.set(File(System.getenv("PRIVATE_KEY") ?: "./certs/private.pem").readText(Charsets.UTF_8))
