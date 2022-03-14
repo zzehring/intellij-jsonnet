@@ -5,6 +5,7 @@
     <vendor>zzehring</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- register a preloading activity. You need to init IntellijLanguageClient with your config, see readme -->
