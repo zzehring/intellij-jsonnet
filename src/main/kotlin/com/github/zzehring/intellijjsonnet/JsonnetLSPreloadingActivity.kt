@@ -66,9 +66,9 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
 
         // Check if LS binary already exists. If it does and the latest release is a higher version, prompt user to update
         // If binary doesn't exist, download latest
-        if (binFile.exists() && compareTagToBinaryVersion(binFile, repoInfo.tag) == true) {
+        if (binFile.exists() && upgradeAvailable(binFile, repoInfo.tag)) {
             presentUpdateBalloon(httpClient, binFile, repoInfo)
-        } else {
+        } else if (!binFile.exists()) {
             download(httpClient, binFile, repoInfo)
         }
 
@@ -84,8 +84,8 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
         )
     }
 
-    // Returns true if binary version >= latest version. False if latest tag is higher
-    private fun compareTagToBinaryVersion(binFile: File, tag: String): Boolean? {
+    // Returns false if binary version < latest version. True if latest tag is higher
+    private fun upgradeAvailable(binFile: File, tag: String): Boolean {
         val p = ProcessBuilder(binFile.toString(), "--version")
             .redirectOutput(ProcessBuilder.Redirect.PIPE)
             .redirectError(ProcessBuilder.Redirect.PIPE)
@@ -95,7 +95,11 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
         val currentVersion = SemVer.parseFromText(versionOutput.split(" ").last())
         val latestVersion = SemVer.parseFromText(tag.trimStart('v'))
         LOG.info("Getting comparison between $currentVersion and $tag")
-        return latestVersion?.let { currentVersion?.isGreaterOrEqualThan(it) }
+        return if (currentVersion != null && latestVersion != null) {
+            !currentVersion.isGreaterOrEqualThan(latestVersion)
+        } else {
+            false
+        }
     }
 
     private fun presentUpdateBalloon(httpClient: HttpClient, binFile: File, repoInfo: TargetReleaseInfo) {
@@ -153,6 +157,7 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
 
     private fun download(httpClient: HttpClient, binFile: File, repoInfo: TargetReleaseInfo) {
         runBlocking {
+            stopServers()
             val httpResponse: HttpResponse = httpClient.get(repoInfo.downloadUrl)
             val responseBody: ByteArray = httpResponse.receive()
             binFile.writeBytes(responseBody)
@@ -165,6 +170,14 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
     }
 
     private fun restartServers() {
+        getProjectToLanguageWrappers().forEach { (_, servers) ->
+            servers.forEach { server ->
+                server.restart()
+            }
+        }
+    }
+
+    private fun stopServers() {
         getProjectToLanguageWrappers().forEach { (_, servers) ->
             servers.forEach { server ->
                 server.restart()
