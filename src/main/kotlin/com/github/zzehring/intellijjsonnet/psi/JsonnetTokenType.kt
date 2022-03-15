@@ -3,9 +3,8 @@ package com.github.zzehring.intellijjsonnet.psi
 
 import com.github.zzehring.intellijjsonnet.JsonnetLanguage
 import com.intellij.psi.tree.IElementType
-import org.jetbrains.annotations.NonNls
 
-class JsonnetTokenType(debugName: @NonNls String) :
+class JsonnetTokenType(debugName: String) :
     IElementType(debugName, JsonnetLanguage.INSTANCE) {
     override fun toString(): String {
         return "JsonnetTokenType." + super.toString()

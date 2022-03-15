@@ -3,6 +3,5 @@ package com.github.zzehring.intellijjsonnet.psi
 
 import com.github.zzehring.intellijjsonnet.JsonnetLanguage
 import com.intellij.psi.tree.IElementType
-import org.jetbrains.annotations.NonNls
 
-class JsonnetElementType(debugName: @NonNls String) : IElementType(debugName, JsonnetLanguage.INSTANCE)
+class JsonnetElementType(debugName: String) : IElementType(debugName, JsonnetLanguage.INSTANCE)
