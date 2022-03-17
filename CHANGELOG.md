@@ -2,7 +2,9 @@
 
 # intellij-jsonnet Changelog
 
-## [Unreleased]
+## [0.0.4]
+### Changed
+- handle stopping/starting server after download correctly.
 
 ## [0.0.3]
 ### Fixed
