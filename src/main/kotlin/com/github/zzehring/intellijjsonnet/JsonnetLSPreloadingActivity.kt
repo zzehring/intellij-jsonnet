@@ -23,6 +23,7 @@ import org.wso2.lsp4intellij.IntellijLanguageClient
 import org.wso2.lsp4intellij.IntellijLanguageClient.getProjectToLanguageWrappers
 import org.wso2.lsp4intellij.client.languageserver.serverdefinition.RawCommandServerDefinition
 import org.wso2.lsp4intellij.listeners.LSPProjectManagerListener
+import org.wso2.lsp4intellij.utils.FileUtils
 import java.io.File
 import java.net.URL
 import java.nio.file.attribute.PosixFilePermissions
@@ -165,22 +166,16 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
             val project = ProjectManager.getInstance().defaultProject
             Notification("lsp", "Language Server jsonnet-language-server (version ${repoInfo.tag}) downloaded", NotificationType.IDE_UPDATE)
                 .notify(project)
-            restartServers()
-        }
-    }
-
-    private fun restartServers() {
-        getProjectToLanguageWrappers().forEach { (_, servers) ->
-            servers.forEach { server ->
-                server.restart()
-            }
+            FileUtils.reloadAllEditors()
         }
     }
 
     private fun stopServers() {
         getProjectToLanguageWrappers().forEach { (_, servers) ->
             servers.forEach { server ->
-                server.restart()
+                LOG.info("Stopping server with status:'${server.status}' and project: ${server.project})}")
+                server.stop(true)
+                LOG.info("Stopped server. New status:'${server.status}'")
             }
         }
     }
