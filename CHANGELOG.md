@@ -2,6 +2,12 @@
 
 # intellij-jsonnet Changelog
 
+## [Unreleased]
+
+## [0.0.5]
+### Added
+- Brace match highlighting
+
 ## [0.0.4]
 ### Changed
 - handle stopping/starting server after download correctly.
