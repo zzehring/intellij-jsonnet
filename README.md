@@ -20,6 +20,7 @@ Additional plugin features:
 - Evaluate Jsonnet file
 - Syntax Highlighting
 - Code block folding
+- Brace/bracket matching
 
 <!-- Plugin description end -->
 
