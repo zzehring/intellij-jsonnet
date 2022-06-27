@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [0.0.6]
+### Fixed
+- Fix setting file permissions for non-POSIX systems
+
 ## [0.0.5]
 ### Added
 - Brace match highlighting
