@@ -26,6 +26,8 @@ import org.wso2.lsp4intellij.listeners.LSPProjectManagerListener
 import org.wso2.lsp4intellij.utils.FileUtils
 import java.io.File
 import java.net.URL
+import java.nio.file.Files
+import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermissions
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.Path
@@ -181,8 +183,14 @@ object JsonnetLSPreloadingActivity : PreloadingActivity() {
     }
 
     private fun setExecutablePerms(file: File) {
-        val executablePerms = PosixFilePermissions.fromString("rwxr--r--")
-        Path(file.toString()).setPosixFilePermissions(executablePerms)
+        if (Files.getFileAttributeView(file.toPath(), PosixFileAttributeView::class.java) != null) {
+            val executablePerms = PosixFilePermissions.fromString("rwxr--r--")
+            Path(file.toString()).setPosixFilePermissions(executablePerms)
+        } else {
+            file.setReadable(true)
+            file.setWritable(true, true)
+            file.setExecutable(true, true)
+        }
     }
 
 }
