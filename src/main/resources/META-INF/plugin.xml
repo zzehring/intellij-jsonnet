@@ -59,6 +59,7 @@
         <lang.foldingBuilder language="Jsonnet"
                              implementationClass="com.github.zzehring.intellijjsonnet.JsonnetFoldingBuilder"/>
         <lang.braceMatcher language="Jsonnet" implementationClass="com.github.zzehring.intellijjsonnet.JsonnetBraceMatcher"/>
+        <formattingService implementation="com.github.zzehring.intellijjsonnet.JsonnetExternalFormatter"/>
     </extensions>
 
     <applicationListeners>
