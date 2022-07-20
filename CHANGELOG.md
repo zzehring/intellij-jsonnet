@@ -3,6 +3,8 @@
 # intellij-jsonnet Changelog
 
 ## [Unreleased]
+### Added
+- Implement Jsonnet reformatting
 
 ## [0.0.6]
 ### Fixed
