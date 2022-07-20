@@ -3,6 +3,7 @@
 [//]: # (![Build]&#40;https://github.com/zzehring/intellij-jsonnet/workflows/Build/badge.svg&#41;)
 [![Version](https://img.shields.io/jetbrains/plugin/v/18752.svg)](https://plugins.jetbrains.com/plugin/18752)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/18752.svg)](https://plugins.jetbrains.com/plugin/18752)
+![Build](https://github.com/zzehring/intellij-jsonnet/workflows/Build/badge.svg)
 
 <!-- Plugin description -->
 
