@@ -13,7 +13,6 @@ data class RepoRelease(
     val draft: Boolean,
     val html_url: String,
     val id: Int,
-    val mentions_count: Int,
     val name: String,
     val node_id: String,
     val prerelease: Boolean,
