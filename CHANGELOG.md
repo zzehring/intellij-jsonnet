@@ -3,6 +3,8 @@
 # intellij-jsonnet Changelog
 
 ## [Unreleased]
+### Added
+- Comment support
 ### Fixed
 - Allow compatibility with 222.* IDE versions
 
