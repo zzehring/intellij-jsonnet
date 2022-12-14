@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [0.0.10]
+### Added
+- Allow compatibility with 223.* IDE versions
+
 ## [0.0.9]
 ### Added
 - Comment support
