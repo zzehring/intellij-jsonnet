@@ -3,6 +3,13 @@
 # intellij-jsonnet Changelog
 
 ## [Unreleased]
+### Changed
+- Upgrade dependencies
+- Upgrade Java version from 11 to 17
+- Update minimum IDE version to 222 (2022.2+)
+
+### Fixed
+- Language Server handling (start/update) now working on 223.*
 
 ## [0.0.10]
 ### Added
