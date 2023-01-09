@@ -1,3 +1,4 @@
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -7,11 +8,11 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.21"
     // Gradle IntelliJ Plugin
     id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
     // Kotlin Serializer Plugin
@@ -30,11 +31,12 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-core:1.6.7")
-    implementation("io.ktor:ktor-client-cio:1.6.7")
+    implementation("io.ktor:ktor-client-core:2.2.1")
+    implementation("io.ktor:ktor-client-cio:2.2.1")
     implementation("net.swiftzer.semver:semver:1.2.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("io.ktor:ktor-client-serialization:1.6.7")
+    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
     implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
     implementation("com.github.ballerina-platform:lsp4intellij:8ee2b55267da684fb55d2866ad3293e8a0a21977")
 }
@@ -99,9 +101,9 @@ tasks {
 
         // Get the latest available change notes from the changelog file
         changeNotes.set(provider {
-            changelog.run {
+            changelog.renderItem(changelog.run {
                 getOrNull(properties("pluginVersion")) ?: getLatest()
-            }.toHTML()
+            }, Changelog.OutputType.HTML)
         })
     }
 
