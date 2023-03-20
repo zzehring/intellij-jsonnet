@@ -37,6 +37,7 @@ class JsonnetExternalFormatter : AsyncDocumentFormattingService() {
     class JsonnetFormattingTask(private val editor: Editor, private val asyncRequest: AsyncFormattingRequest) : FormattingTask {
         override fun run() {
             val em = EditorEventManagerBase.forEditor(editor)
+            if (em == null) return
             val myEm = MyEditorEventManager(editor, em.requestManager, em.project)
             // Using custom reformat code to workaround same-line ordering problem:
             // When the language server returns edits, often the edit entries will have the same range/span (i.e. same line).
