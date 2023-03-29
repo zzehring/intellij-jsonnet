@@ -3,6 +3,8 @@
 # intellij-jsonnet Changelog
 
 ## Unreleased
+### Changed
+- Allow compatibility with 231.* IDE versions
 
 ### Fixed
 - NullPointerException crashes sometimes when formatting
