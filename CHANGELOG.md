@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.1.1 - 2023-03-21
+
 ### Fixed
 - NullPointerException crashes sometimes when formatting
 
