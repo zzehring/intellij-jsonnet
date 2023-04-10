@@ -3,6 +3,9 @@
 # intellij-jsonnet Changelog
 
 ## Unreleased
+
+## 0.1.2 - 2023-04-10
+
 ### Changed
 - Allow compatibility with 231.* IDE versions
 
