@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.1.3 - 2023-05-03
+
 ### Fixed
 - allow for unexpected json fields when querying GitHub for latest releases
 
