@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+### Fixed
+- add support for IDE configured http proxy for jsonnet language server binary download (PR #61)
+
 ## 0.1.3 - 2023-05-03
 
 ### Fixed
