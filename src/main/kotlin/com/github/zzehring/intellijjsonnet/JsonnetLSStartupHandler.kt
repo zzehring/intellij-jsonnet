@@ -9,10 +9,13 @@ import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.ProjectManager
+import com.intellij.util.net.HttpConfigurable
 import com.intellij.util.system.CpuArch
 import com.intellij.util.text.SemVer
 import io.ktor.client.HttpClient
 import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.engine.ProxyBuilder
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
@@ -57,6 +60,14 @@ class JsonnetLSStartupHandler {
 
         val httpClient = HttpClient(CIO) {
             expectSuccess = false
+            engine {
+                val proxySettings = HttpConfigurable.getInstance()
+                val proxyHost = proxySettings.PROXY_HOST
+
+                if (proxySettings != null && proxySettings.USE_HTTP_PROXY && proxyHost.isNotEmpty()) {
+                    proxy = ProxyBuilder.http("http://${proxyHost}:${proxySettings.PROXY_PORT}/")
+                }
+            }
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true
