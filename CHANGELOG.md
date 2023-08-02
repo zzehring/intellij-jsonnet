@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+### Added
+- Allow compatibility with 232.* IDE versions
+
 ## 0.1.4 - 2023-07-05
 
 ### Fixed
