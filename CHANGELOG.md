@@ -5,6 +5,14 @@
 ## Unreleased
 
 ### Added
+- Allow compatibility with 233.* IDE versions
+- Upgrade Gradle version to 8.5
+- Upgrade Gradle Kotlin plugin version to 1.9.21
+- Upgrade Gradle Intellij plugin version to 1.16.1
+
+## 0.1.5 - 2023-08-02
+
+### Added
 - Allow compatibility with 232.* IDE versions
 
 ## 0.1.4 - 2023-07-05
