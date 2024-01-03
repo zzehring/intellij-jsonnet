@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+### Added
+- Allow compatibility with 233.* IDE versions
+- Upgrade kotlin from 1.7.21 to 1.9.21
+
 ## 0.1.5 - 2023-08-02
 
 ### Added
