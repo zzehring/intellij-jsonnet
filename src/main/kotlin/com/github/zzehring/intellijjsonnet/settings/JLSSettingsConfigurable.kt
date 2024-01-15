@@ -18,11 +18,13 @@ class JLSSettingsConfigurable : Configurable {
     override fun isModified(): Boolean {
         val settings = JLSSettingsStateComponent.instance.state
         return mySettingsComponent.getReleaseRepository() != settings.releaseRepository
+                || mySettingsComponent.getJsonnetLanguageServerCustomPath() != settings.jsonnetLanguageServerCustomPath
     }
 
     override fun apply() {
         val settings = JLSSettingsStateComponent.instance.state
         settings.releaseRepository = mySettingsComponent.getReleaseRepository()
+        settings.jsonnetLanguageServerCustomPath = mySettingsComponent.getJsonnetLanguageServerCustomPath()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -37,6 +39,7 @@ class JLSSettingsConfigurable : Configurable {
     override fun reset() {
         val settings = JLSSettingsStateComponent.instance.state
         mySettingsComponent.setReleaseRepository(settings.releaseRepository)
+        mySettingsComponent.setJsonnetLanguageServerCustomPath(settings.jsonnetLanguageServerCustomPath)
     }
 
 }
