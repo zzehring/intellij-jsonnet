@@ -30,5 +30,6 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
 
     class SettingsState {
         var releaseRepository = "grafana/jsonnet-language-server"
+        var jsonnetLanguageServerCustomPath = "path/to/binary/jsonnet-language-server"
     }
 }

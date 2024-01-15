@@ -52,42 +52,52 @@ class JsonnetLSStartupHandler {
         val platform = getPlatform()
         val arch = getArch()
 
+        val jsonnetLanguageServerCustomPath = JLSSettingsStateComponent.instance.state.jsonnetLanguageServerCustomPath
+
         log.info("Running on -> platform: $platform ; arch: $arch")
 
-        val releaseURL = URL("https://api.github.com/repos/${languageServerRepo}/releases/latest")
+        // Determine the binary file path
+        val customPathFile = if (jsonnetLanguageServerCustomPath.isNullOrBlank()) null else File(jsonnetLanguageServerCustomPath)
+        val binFile = if (customPathFile != null && customPathFile.exists()) {
+            log.info("Using custom path for jsonnet-language-server: $jsonnetLanguageServerCustomPath")
+            customPathFile
+        } else {
+            val releaseURL = URL("https://api.github.com/repos/${languageServerRepo}/releases/latest")
 
-        log.info("Repo/release URL: $releaseURL")
+            log.info("Repo/release URL: $releaseURL")
 
-        val httpClient = HttpClient(CIO) {
-            expectSuccess = false
-            engine {
-                val proxySettings = HttpConfigurable.getInstance()
-                val proxyHost = proxySettings.PROXY_HOST
+            val httpClient = HttpClient(CIO) {
+                expectSuccess = false
+                engine {
+                    val proxySettings = HttpConfigurable.getInstance()
+                    val proxyHost = proxySettings.PROXY_HOST
 
-                if (proxySettings != null && proxySettings.USE_HTTP_PROXY && proxyHost.isNotEmpty()) {
-                    proxy = ProxyBuilder.http("http://${proxyHost}:${proxySettings.PROXY_PORT}/")
+                    if (proxySettings != null && proxySettings.USE_HTTP_PROXY && proxyHost.isNotEmpty()) {
+                        proxy = ProxyBuilder.http("http://${proxyHost}:${proxySettings.PROXY_PORT}/")
+                    }
+                }
+                install(ContentNegotiation) {
+                    json(Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    })
                 }
             }
-            install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+
+            val repoInfo = getLatestReleaseInfo(httpClient, releaseURL, platform, arch)
+            log.info("Latest tag: ${repoInfo.tag} ; Download URL: ${repoInfo.downloadUrl}")
+
+            val downloadedBinFile = File(PathManager.getPluginsPath().plus("/Jsonnet Language Server/jsonnet-language-server"))
+
+            // Check if LS binary already exists. If it does and the latest release is a higher version, prompt user to update
+            // If binary doesn't exist, download latest
+            if (downloadedBinFile.exists() && upgradeAvailable(downloadedBinFile, repoInfo.tag)) {
+                presentUpdateBalloon(httpClient, downloadedBinFile, repoInfo)
+            } else if (!downloadedBinFile.exists()) {
+                download(httpClient, downloadedBinFile, repoInfo)
             }
-        }
-
-        val repoInfo = getLatestReleaseInfo(httpClient, releaseURL, platform, arch)
-        log.info("Latest tag: ${repoInfo.tag} ; Download URL: ${repoInfo.downloadUrl}")
-
-        val binFile = File(PathManager.getPluginsPath().plus("/Jsonnet Language Server/jsonnet-language-server"))
-
-        // Check if LS binary already exists. If it does and the latest release is a higher version, prompt user to update
-        // If binary doesn't exist, download latest
-        if (binFile.exists() && upgradeAvailable(binFile, repoInfo.tag)) {
-            presentUpdateBalloon(httpClient, binFile, repoInfo)
-        } else if (!binFile.exists()) {
-            download(httpClient, binFile, repoInfo)
+            downloadedBinFile
         }
 
         setExecutablePerms(binFile)

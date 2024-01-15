@@ -13,10 +13,12 @@ import javax.swing.JPanel
 class JLSSettingsComponent {
     var myMainPanel: JPanel
     private val releaseRepository = JBTextField()
+    private val jsonnetLanguageServerCustomPath = JBTextField()
 
     init {
         this.myMainPanel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Release Repo (Github Repository from which to download language server): "), releaseRepository, 1, true)
+            .addLabeledComponent(JBLabel("Custom path to language server binary: "), jsonnetLanguageServerCustomPath, 1, true)
             .addComponentFillVertically(JPanel(), 0)
             .panel
     }
@@ -29,9 +31,16 @@ class JLSSettingsComponent {
     fun getReleaseRepository(): String {
         return releaseRepository.text
     }
+    @NotNull
+    fun getJsonnetLanguageServerCustomPath(): String {
+        return jsonnetLanguageServerCustomPath.text
+    }
 
     fun setReleaseRepository(newPath: String) {
         releaseRepository.text = newPath
+    }
+    fun setJsonnetLanguageServerCustomPath(newPath: String) {
+        jsonnetLanguageServerCustomPath.text = newPath
     }
 
 }
