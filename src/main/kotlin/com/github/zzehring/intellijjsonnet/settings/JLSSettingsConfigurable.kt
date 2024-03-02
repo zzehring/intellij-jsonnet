@@ -10,19 +10,25 @@ class JLSSettingsConfigurable : Configurable {
     private lateinit var mySettingsComponent: JLSSettingsComponent
 
     @Nullable
-    override fun createComponent(): JComponent? {
+    override fun createComponent(): JComponent {
         mySettingsComponent = JLSSettingsComponent()
-        return mySettingsComponent.myMainPanel
+        mySettingsComponent.setEnableLintDiagnostics(true)
+        mySettingsComponent.setEnableEvalDiagnostics(false)
+        return mySettingsComponent.repoPanel
     }
 
     override fun isModified(): Boolean {
         val settings = JLSSettingsStateComponent.instance.state
         return mySettingsComponent.getReleaseRepository() != settings.releaseRepository
+                || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
+                || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
     }
 
     override fun apply() {
         val settings = JLSSettingsStateComponent.instance.state
         settings.releaseRepository = mySettingsComponent.getReleaseRepository()
+        settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
+        settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -37,6 +43,8 @@ class JLSSettingsConfigurable : Configurable {
     override fun reset() {
         val settings = JLSSettingsStateComponent.instance.state
         mySettingsComponent.setReleaseRepository(settings.releaseRepository)
+        mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
+        mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
     }
 
 }

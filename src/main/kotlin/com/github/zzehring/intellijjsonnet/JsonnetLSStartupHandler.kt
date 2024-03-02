@@ -49,6 +49,8 @@ class JsonnetLSStartupHandler {
     fun start() {
 
         val languageServerRepo = JLSSettingsStateComponent.instance.state.releaseRepository
+        val enableEvalDiagnostics = JLSSettingsStateComponent.instance.state.enableEvalDiagnostics
+        val enableLintDiagnostics = JLSSettingsStateComponent.instance.state.enableLintDiagnostics
         val platform = getPlatform()
         val arch = getArch()
 
@@ -95,10 +97,17 @@ class JsonnetLSStartupHandler {
         // Configure language server
         // TODO: Make --tanka configurable
         // TODO: add JPath configuration
+        var optionalArgs = arrayOf<String>()
+        if (enableEvalDiagnostics) {
+            optionalArgs += "--eval-diags"
+        }
+        if (enableLintDiagnostics) {
+            optionalArgs += "--lint"
+        }
         IntellijLanguageClient.addServerDefinition(
             RawCommandServerDefinition(
                 EXTENSIONS,
-                arrayOf(binFile.toString(), "--tanka", "--lint")
+                arrayOf(binFile.toString(), "--tanka", *optionalArgs)
             )
         )
     }

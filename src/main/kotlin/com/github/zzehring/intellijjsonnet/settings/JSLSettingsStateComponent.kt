@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable
 
 @State(
     name = "com.github.zzehring.intellijjsonnet.JLSSettingsState",
-    storages = [Storage("SdkSettingsPlugin.xml")]
+    storages = [Storage("JsonnetLsSettingsPlugin.xml")]
 )
 open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsStateComponent.SettingsState> {
 
@@ -30,5 +30,7 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
 
     class SettingsState {
         var releaseRepository = "grafana/jsonnet-language-server"
+        var enableLintDiagnostics = false
+        var enableEvalDiagnostics = false
     }
 }
