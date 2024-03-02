@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+### Added
+- Allow enabling/disabling of lint and eval diagnostics on language server through plugin settings (PR ##80)
+
 ## 0.1.6 - 2024-01-03
 
 ### Added
