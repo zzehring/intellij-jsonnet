@@ -12,6 +12,9 @@
 - Update minimum IDE version to 233.2 (PR #82)
 - Upgrade kotlin to 1.17.2 (PR #80)
 
+### Fixed
+- Correct `jsonnet`/`libsonnet` icon path 
+
 ## 0.1.6 - 2024-01-03
 
 ### Added
