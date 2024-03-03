@@ -5,6 +5,6 @@ import javax.swing.Icon
 
 class JsonnetIcons {
     companion object {
-        val FILE: Icon = IconLoader.getIcon("/icons/jsonnet_logo.png", JsonnetIcons::class.java)
+        val FILE: Icon = IconLoader.getIcon("/icons/jsonnet_logo.svg", JsonnetIcons::class.java)
     }
 }
