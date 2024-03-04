@@ -3,7 +3,10 @@ package com.github.zzehring.intellijjsonnet.settings
 import com.intellij.openapi.options.Configurable
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
 import javax.swing.JComponent
+import javax.swing.JPanel
 
 class JLSSettingsConfigurable : Configurable {
 
@@ -14,7 +17,18 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent = JLSSettingsComponent()
         mySettingsComponent.setEnableLintDiagnostics(true)
         mySettingsComponent.setEnableEvalDiagnostics(false)
-        return mySettingsComponent.repoPanel
+        val containerPanel = JPanel(GridBagLayout())
+        val constraints = GridBagConstraints()
+        constraints.fill = GridBagConstraints.HORIZONTAL
+        constraints.anchor = GridBagConstraints.NORTHWEST
+        constraints.weightx = 1.0
+        constraints.weighty = 1.0
+        constraints.gridx = 0
+        constraints.gridy = 0
+        containerPanel.add(mySettingsComponent.settingsPanel, constraints)
+        constraints.gridy = 1
+        containerPanel.add(mySettingsComponent.jPathsPanel, constraints)
+        return containerPanel
     }
 
     override fun isModified(): Boolean {
@@ -22,6 +36,7 @@ class JLSSettingsConfigurable : Configurable {
         return mySettingsComponent.getReleaseRepository() != settings.releaseRepository
                 || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
                 || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
+                || mySettingsComponent.getJPaths() != settings.jPaths
     }
 
     override fun apply() {
@@ -29,6 +44,7 @@ class JLSSettingsConfigurable : Configurable {
         settings.releaseRepository = mySettingsComponent.getReleaseRepository()
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
+        settings.jPaths = mySettingsComponent.getJPaths()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -45,6 +61,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setReleaseRepository(settings.releaseRepository)
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
+        mySettingsComponent.setJPaths(settings.jPaths)
     }
 
 }

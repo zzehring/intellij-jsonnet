@@ -30,6 +30,8 @@ import org.wso2.lsp4intellij.utils.FileUtils
 import java.io.File
 import java.net.URL
 import java.nio.file.Files
+import java.nio.file.InvalidPathException
+import java.nio.file.Paths
 import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermissions
 import java.util.concurrent.TimeUnit
@@ -51,6 +53,7 @@ class JsonnetLSStartupHandler {
         val languageServerRepo = JLSSettingsStateComponent.instance.state.releaseRepository
         val enableEvalDiagnostics = JLSSettingsStateComponent.instance.state.enableEvalDiagnostics
         val enableLintDiagnostics = JLSSettingsStateComponent.instance.state.enableLintDiagnostics
+        val jpaths = JLSSettingsStateComponent.instance.state.jPaths
         val platform = getPlatform()
         val arch = getArch()
 
@@ -103,6 +106,15 @@ class JsonnetLSStartupHandler {
         }
         if (enableLintDiagnostics) {
             optionalArgs += "--lint"
+        }
+        // Add jpaths to optionalArgs, if jpath is valid path
+        for (jpath in jpaths) {
+            if (jpath.isNotEmpty() && isValidPath(jpath)) {
+                optionalArgs += "--jpath"
+                optionalArgs += jpath
+            } else {
+                log.warn("Invalid jpath: $jpath")
+            }
         }
         IntellijLanguageClient.addServerDefinition(
             RawCommandServerDefinition(
@@ -233,6 +245,15 @@ class JsonnetLSStartupHandler {
             file.setReadable(true)
             file.setWritable(true, true)
             file.setExecutable(true, true)
+        }
+    }
+
+    private fun isValidPath(path: String): Boolean {
+        return try {
+            Paths.get(path)
+            true
+        } catch (e: InvalidPathException) {
+            false
         }
     }
 

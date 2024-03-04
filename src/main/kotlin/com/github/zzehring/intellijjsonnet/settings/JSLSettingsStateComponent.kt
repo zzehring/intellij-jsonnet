@@ -32,5 +32,6 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         var releaseRepository = "grafana/jsonnet-language-server"
         var enableLintDiagnostics = false
         var enableEvalDiagnostics = false
+        var jPaths = listOf<String>()
     }
 }
