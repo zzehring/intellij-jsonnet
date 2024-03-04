@@ -5,7 +5,8 @@
 ## Unreleased
 
 ### Added
-- Allow enabling/disabling of lint and eval diagnostics on language server through plugin settings (PR ##80)
+- Allow enabling/disabling of lint and eval diagnostics on language server through plugin settings (PR #80)
+- Allow specifying JPaths to pass onto language server (PR #88)
 
 ### Changed
 - Allow compatibility with 241.* IDE versions (PR #82)
