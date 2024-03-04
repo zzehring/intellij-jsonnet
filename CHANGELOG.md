@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.2.1 - 2024-03-04
+
 ### Added
 - Allow enabling/disabling of lint and eval diagnostics on language server through plugin settings (PR #80)
 - Allow specifying JPaths to pass onto language server (PR #88)
@@ -14,7 +16,7 @@
 - Upgrade kotlin to 1.17.2 (PR #80)
 
 ### Fixed
-- Correct `jsonnet`/`libsonnet` icon path 
+- Correct `jsonnet`/`libsonnet` icon path
 
 ## 0.1.6 - 2024-01-03
 
