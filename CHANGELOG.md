@@ -4,6 +4,11 @@
 
 ## Unreleased
 
+### Added
+- Bump gradle version to 8.9
+- Migrate to v2 of Gradle IntelliJ Plugin
+- Add support for IntelliJ 2024.2
+
 ## 0.2.1 - 2024-03-04
 
 ### Added
