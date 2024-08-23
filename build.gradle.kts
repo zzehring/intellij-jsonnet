@@ -57,6 +57,7 @@ dependencies {
 }
 
 intellijPlatform {
+    projectName = properties("pluginName")
     pluginConfiguration {
         name = properties("pluginName")
         version = properties("pluginVersion")
