@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+### Fixed
+- Handle possible paths for plugin dir
+
 ## 0.3.0 - 2024-08-23
 
 ### Added
