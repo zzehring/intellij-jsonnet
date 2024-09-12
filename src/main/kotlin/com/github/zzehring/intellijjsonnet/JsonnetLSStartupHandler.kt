@@ -3,11 +3,14 @@ package com.github.zzehring.intellijjsonnet
 import com.github.zzehring.intellijjsonnet.releases.Asset
 import com.github.zzehring.intellijjsonnet.releases.RepoRelease
 import com.github.zzehring.intellijjsonnet.settings.JLSSettingsStateComponent
+import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.PathManager
+import com.intellij.openapi.application.PluginPathManager
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.util.net.HttpConfigurable
 import com.intellij.util.system.CpuArch
@@ -23,6 +26,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import okio.Path.Companion.toPath
 import org.wso2.lsp4intellij.IntellijLanguageClient
 import org.wso2.lsp4intellij.client.languageserver.serverdefinition.RawCommandServerDefinition
 import org.wso2.lsp4intellij.listeners.LSPProjectManagerListener
@@ -36,6 +40,7 @@ import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermissions
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 import kotlin.io.path.setPosixFilePermissions
 
 const val EXTENSIONS = "jsonnet,libsonnet"
@@ -85,7 +90,8 @@ class JsonnetLSStartupHandler {
         val repoInfo = getLatestReleaseInfo(httpClient, releaseURL, platform, arch)
         log.info("Latest tag: ${repoInfo.tag} ; Download URL: ${repoInfo.downloadUrl}")
 
-        val binFile = File(PathManager.getPluginsPath().plus("/jsonnet-language-server/jsonnet-language-server"))
+        val binFile = File(getPluginPath().plus("/jsonnet-language-server"))
+        log.info("Binary file: ${binFile.absolutePath}")
 
         // Check if LS binary already exists. If it does and the latest release is a higher version, prompt user to update
         // If binary doesn't exist, download latest
@@ -257,4 +263,12 @@ class JsonnetLSStartupHandler {
         }
     }
 
+    private fun getPluginPath(): String {
+        val rootPluginsPath = PathManager.getPluginsPath()
+        var pluginPath = Paths.get(rootPluginsPath.plus("/jsonnet-language-server"))
+        if (!Files.exists(pluginPath)) {
+            pluginPath = Paths.get(rootPluginsPath.plus("/Jsonnet Language Server"))
+        }
+        return pluginPath.toString()
+    }
 }
