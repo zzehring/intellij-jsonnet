@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.3.2 - 2024-09-13
+
 ### Fixed
 - Display server status widget in statusbar
 
