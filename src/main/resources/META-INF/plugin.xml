@@ -63,6 +63,11 @@
         <lang.commenter
                 language="Jsonnet"
                 implementationClass="com.github.zzehring.intellijjsonnet.SimpleCommenter"/>
+
+        <!-- for displaying the statusbar icon -->
+        <statusBarWidgetFactory implementation="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                id="org.wso2.lsp4intellij.statusbar.LSPServerStatusWidgetFactory"
+                                order="first" />
     </extensions>
 
     <applicationListeners>
