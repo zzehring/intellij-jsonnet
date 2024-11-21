@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+## Changed
+- Allow compatibility with 243.* IDE versions (PR #106)
+
 ## 0.3.2 - 2024-09-13
 
 ### Fixed
