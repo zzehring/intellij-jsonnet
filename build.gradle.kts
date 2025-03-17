@@ -3,7 +3,7 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 fun properties(key: String) = project.findProperty(key).toString()
 
@@ -11,13 +11,13 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.9.21"
+    id("org.jetbrains.kotlin.jvm") version "2.1.10"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij.platform") version "2.0.0"
+    id("org.jetbrains.intellij.platform") version "2.3.0"
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "2.0.0"
+    id("org.jetbrains.changelog") version "2.2.1"
     // Kotlin Serializer Plugin
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.10"
 }
 
 group = properties("pluginGroup")
@@ -35,19 +35,18 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-core:2.2.1")
-    implementation("io.ktor:ktor-client-cio:2.2.1")
-    implementation("net.swiftzer.semver:semver:1.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
-    implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
+    implementation("io.ktor:ktor-client-core:3.1.1")
+    implementation("io.ktor:ktor-client-cio:3.1.1")
+    implementation("net.swiftzer.semver:semver:2.1.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.10")
+    implementation("io.ktor:ktor-client-content-negotiation:3.1.1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.1")
+    implementation("org.jetbrains.kotlin:kotlin-native-utils:2.1.10")
     implementation("com.github.ballerina-platform:lsp4intellij:0.96.2")
 
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
 
-        instrumentationTools()
         zipSigner()
         pluginVerifier()
         testFramework(TestFrameworkType.Platform)
@@ -115,15 +114,18 @@ changelog {
     groups.set(emptyList())
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.valueOf(String.format("JVM_%s", properties("javaVersion"))))
+    }
+}
+
 tasks {
     // Set the JVM compatibility versions
     properties("javaVersion").let {
         withType<JavaCompile> {
             sourceCompatibility = it
             targetCompatibility = it
-        }
-        withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = it
         }
     }
 
