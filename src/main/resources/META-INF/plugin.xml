@@ -44,7 +44,7 @@
         
         <!-- custom settings for configuring Language Server -->
         <applicationService serviceImplementation="com.github.zzehring.intellijjsonnet.settings.JLSSettingsStateComponent"/>
-        <applicationConfigurable parentId="tools" instance="com.github.zzehring.intellijjsonnet.settings.JLSSettingsConfigurable"/>
+        <projectConfigurable parentId="tools" instance="com.github.zzehring.intellijjsonnet.settings.JLSSettingsConfigurable"/>
 
         <!-- custom language stuff and things -->
         <fileType name="Jsonnet File"

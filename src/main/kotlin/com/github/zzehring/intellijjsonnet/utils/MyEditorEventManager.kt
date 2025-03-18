@@ -22,6 +22,8 @@ class MyEditorEventManager(
 ) {
     private val identifier = TextDocumentIdentifier(org.wso2.lsp4intellij.utils.FileUtils.editorToURIString(editor))
 
+
+
     /**
      * Reformat the whole document
      */

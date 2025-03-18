@@ -1,14 +1,19 @@
 package com.github.zzehring.intellijjsonnet.settings
 
+import com.intellij.ide.projectWizard.NewProjectWizardCollector
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.IntelliJProjectUtil
+import com.intellij.openapi.project.Project
+import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable
+import org.wso2.lsp4intellij.IntellijLanguageClient
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
 
-class JLSSettingsConfigurable : Configurable {
+class JLSSettingsConfigurable(private val project: Project) : Configurable {
 
     private lateinit var mySettingsComponent: JLSSettingsComponent
 
@@ -37,6 +42,8 @@ class JLSSettingsConfigurable : Configurable {
                 || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
                 || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
                 || mySettingsComponent.getJPaths() != settings.jPaths
+                || mySettingsComponent.getLocalLSPPath() != settings.localLSPPath
+                || mySettingsComponent.getExtCode() != settings.extCode
     }
 
     override fun apply() {
@@ -45,6 +52,20 @@ class JLSSettingsConfigurable : Configurable {
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
         settings.jPaths = mySettingsComponent.getJPaths()
+        settings.extCode = mySettingsComponent.getExtCode()
+        settings.localLSPPath = mySettingsComponent.getLocalLSPPath()
+
+        val didChangeConfigurationParams = DidChangeConfigurationParams()
+        didChangeConfigurationParams.settings = hashMapOf(
+            "jpath" to mySettingsComponent.getJPaths(),
+            "show_docstring_in_completion" to true,
+            "ext_code" to mySettingsComponent.getExtCodeAsMap()
+        )
+
+        IntellijLanguageClient.didChangeConfiguration(
+            didChangeConfigurationParams,
+            project
+        )
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -62,6 +83,8 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
         mySettingsComponent.setJPaths(settings.jPaths)
+        mySettingsComponent.setExtCode(settings.extCode)
+        mySettingsComponent.setLocalLSPPath(settings.localLSPPath)
     }
 
 }

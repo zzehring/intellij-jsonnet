@@ -3,14 +3,12 @@ package com.github.zzehring.intellijjsonnet
 import com.github.zzehring.intellijjsonnet.releases.Asset
 import com.github.zzehring.intellijjsonnet.releases.RepoRelease
 import com.github.zzehring.intellijjsonnet.settings.JLSSettingsStateComponent
-import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.PathManager
-import com.intellij.openapi.application.PluginPathManager
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManager
 import com.intellij.util.net.HttpConfigurable
 import com.intellij.util.system.CpuArch
@@ -26,7 +24,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import okio.Path.Companion.toPath
+import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.wso2.lsp4intellij.IntellijLanguageClient
 import org.wso2.lsp4intellij.client.languageserver.serverdefinition.RawCommandServerDefinition
 import org.wso2.lsp4intellij.listeners.LSPProjectManagerListener
@@ -40,7 +38,6 @@ import java.nio.file.attribute.PosixFileAttributeView
 import java.nio.file.attribute.PosixFilePermissions
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.Path
-import kotlin.io.path.exists
 import kotlin.io.path.setPosixFilePermissions
 
 const val EXTENSIONS = "jsonnet,libsonnet"
@@ -53,14 +50,10 @@ class JsonnetLSStartupHandler {
         LSPProjectManagerListener::class.java
     )
 
-    fun start() {
-
-        val languageServerRepo = JLSSettingsStateComponent.instance.state.releaseRepository
-        val enableEvalDiagnostics = JLSSettingsStateComponent.instance.state.enableEvalDiagnostics
-        val enableLintDiagnostics = JLSSettingsStateComponent.instance.state.enableLintDiagnostics
-        val jpaths = JLSSettingsStateComponent.instance.state.jPaths
+    fun ensureLSPFromGithub() : File {
         val platform = getPlatform()
         val arch = getArch()
+        val languageServerRepo = JLSSettingsStateComponent.instance.state.releaseRepository
 
         log.info("Running on -> platform: $platform ; arch: $arch")
 
@@ -103,6 +96,18 @@ class JsonnetLSStartupHandler {
 
         setExecutablePerms(binFile)
 
+        return binFile
+    }
+
+    fun start(project: Project) {
+        val enableEvalDiagnostics = JLSSettingsStateComponent.instance.state.enableEvalDiagnostics
+        val enableLintDiagnostics = JLSSettingsStateComponent.instance.state.enableLintDiagnostics
+        val jpaths = JLSSettingsStateComponent.instance.state.jPaths
+        val localLspPath = JLSSettingsStateComponent.instance.state.localLSPPath
+        val extCode = JLSSettingsStateComponent.instance.state.extCode
+        val lspBinary = if (localLspPath.isNotEmpty()) File(localLspPath) else ensureLSPFromGithub()
+
+
         // Configure language server
         // TODO: Make --tanka configurable
         // TODO: add JPath configuration
@@ -125,8 +130,20 @@ class JsonnetLSStartupHandler {
         IntellijLanguageClient.addServerDefinition(
             RawCommandServerDefinition(
                 EXTENSIONS,
-                arrayOf(binFile.toString(), "--tanka", *optionalArgs)
+                arrayOf(lspBinary.toString(), *optionalArgs)
             )
+        )
+
+        val didChangeConfigurationParams = DidChangeConfigurationParams()
+        didChangeConfigurationParams.settings = hashMapOf(
+            "jpath" to JLSSettingsStateComponent.instance.state.jPaths,
+            "show_docstring_in_completion" to true,
+            "ext_code" to JLSSettingsStateComponent.instance.state.getExtCodeAsMap()
+        )
+
+        IntellijLanguageClient.didChangeConfiguration(
+            didChangeConfigurationParams,
+            project
         )
     }
 

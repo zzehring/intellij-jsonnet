@@ -19,6 +19,8 @@ class JLSSettingsComponent {
     var settingsPanel: JPanel
     var jPathsPanel: JPanel
     private val releaseRepository = JBTextField()
+    private val localLSPPath = JBTextField()
+    private val extCodeField = JBTextField()
     private val enableLintDiagnostics = JBCheckBox("Enable lint diagnostics on language server")
     private val enableEvalDiagnostics = JBCheckBox("Enable eval diagnostics on language")
     private val jPathsTableModel = DefaultTableModel(arrayOf("JPath"), 0)
@@ -26,10 +28,12 @@ class JLSSettingsComponent {
     init {
         this.settingsPanel = FormBuilder.createFormBuilder()
             .addLabeledComponent(JBLabel("Release Repo (Github Repository from which to download language server): "), releaseRepository, 1, true)
+            .addLabeledComponent(JBLabel("Local LSP binary path: "), localLSPPath, 1, true)
             .addComponent(enableEvalDiagnostics)
             .addTooltip("Try to evaluate files to find errors and warnings. Disable on large projects to improve performance. IDE restart required.")
             .addComponent(enableLintDiagnostics)
             .addTooltip("Enable live linting diagnostics. Disable on large projects to improve performance. IDE restart required.")
+            .addLabeledComponent(JBLabel("Ext Code : "), extCodeField, 1, true)
             .panel
         val jPathsTable = JBTable(jPathsTableModel)
         val tablePanel = ToolbarDecorator.createDecorator(jPathsTable)
@@ -59,6 +63,34 @@ class JLSSettingsComponent {
 
     fun setReleaseRepository(newPath: String) {
         releaseRepository.text = newPath
+    }
+
+    @NotNull
+    fun getExtCode(): String {
+        return extCodeField.text
+    }
+
+    @NotNull
+    fun getExtCodeAsMap(): Map<String, String> {
+        return         extCodeField.text
+            .split(',')
+            .associateBy(
+                keySelector = { s: String -> s.split('=')[0] },
+                valueTransform = { s: String -> s.split('=').getOrElse(1, defaultValue = { "" }) },
+            )
+    }
+
+    fun setExtCode(extcode: String) {
+        extCodeField.text = extcode
+    }
+
+    @NotNull
+    fun getLocalLSPPath(): String {
+        return extCodeField.text
+    }
+
+    fun setLocalLSPPath(newPath: String) {
+        extCodeField.text = newPath
     }
 
     fun getEnableLintDiagnostics(): Boolean {
