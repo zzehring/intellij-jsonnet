@@ -7,7 +7,7 @@
 ## 0.3.4 - 2025-04-17
 
 ### Changed
-- Allow compatibility with 251.* IDE versions
+- Remove upper compatibility limit with IDE versions
 
 ## 0.3.3 - 2024-11-21
 
