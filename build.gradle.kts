@@ -42,7 +42,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
     implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
-    implementation("com.github.ballerina-platform:lsp4intellij:0.96.2")
+    implementation("com.github.ballerina-platform:lsp4intellij:0.96.1")
 
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
