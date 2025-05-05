@@ -4,8 +4,6 @@
 
 ## Unreleased
 
-## 0.3.4 - 2025-04-17
-
 ### Changed
 - Remove upper compatibility limit with IDE versions
 
