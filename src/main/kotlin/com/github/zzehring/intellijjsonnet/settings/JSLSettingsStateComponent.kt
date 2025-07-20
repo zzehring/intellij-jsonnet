@@ -33,5 +33,6 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         var enableLintDiagnostics = false
         var enableEvalDiagnostics = false
         var jPaths = listOf<String>()
+        var quoteStyle = "leave"
     }
 }

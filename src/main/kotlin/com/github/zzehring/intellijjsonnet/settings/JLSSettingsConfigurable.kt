@@ -17,6 +17,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent = JLSSettingsComponent()
         mySettingsComponent.setEnableLintDiagnostics(true)
         mySettingsComponent.setEnableEvalDiagnostics(false)
+
         val containerPanel = JPanel(GridBagLayout())
         val constraints = GridBagConstraints()
         constraints.fill = GridBagConstraints.HORIZONTAL
@@ -37,6 +38,7 @@ class JLSSettingsConfigurable : Configurable {
                 || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
                 || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
                 || mySettingsComponent.getJPaths() != settings.jPaths
+                || mySettingsComponent.getQuoteStyle() != settings.quoteStyle
     }
 
     override fun apply() {
@@ -45,6 +47,7 @@ class JLSSettingsConfigurable : Configurable {
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
         settings.jPaths = mySettingsComponent.getJPaths()
+        settings.quoteStyle = mySettingsComponent.getQuoteStyle()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -62,6 +65,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
         mySettingsComponent.setJPaths(settings.jPaths)
+        mySettingsComponent.setQuoteStyle(settings.quoteStyle)
     }
 
 }

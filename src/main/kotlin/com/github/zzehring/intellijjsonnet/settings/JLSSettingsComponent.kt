@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull
 import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.table.DefaultTableModel
+import javax.swing.JComboBox
 
 /**
  * Supports creating and managing a {@link JPanel} for the Settings Dialog
@@ -22,6 +23,7 @@ class JLSSettingsComponent {
     private val enableLintDiagnostics = JBCheckBox("Enable lint diagnostics on language server")
     private val enableEvalDiagnostics = JBCheckBox("Enable eval diagnostics on language")
     private val jPathsTableModel = DefaultTableModel(arrayOf("JPath"), 0)
+    private val quoteStyleComboBox = JComboBox(arrayOf("leave", "single", "double"))
 
     init {
         this.settingsPanel = FormBuilder.createFormBuilder()
@@ -30,6 +32,7 @@ class JLSSettingsComponent {
             .addTooltip("Try to evaluate files to find errors and warnings. Disable on large projects to improve performance. IDE restart required.")
             .addComponent(enableLintDiagnostics)
             .addTooltip("Enable live linting diagnostics. Disable on large projects to improve performance. IDE restart required.")
+            .addLabeledComponent(JBLabel("String Quote Style: "), quoteStyleComboBox, 1, true)
             .panel
         val jPathsTable = JBTable(jPathsTableModel)
         val tablePanel = ToolbarDecorator.createDecorator(jPathsTable)
@@ -77,6 +80,7 @@ class JLSSettingsComponent {
         enableEvalDiagnostics.isSelected = isSelected
     }
 
+
     fun getJPaths(): List<String> {
         val paths = mutableListOf<String>()
         for (i in 0 until jPathsTableModel.rowCount) {
@@ -93,4 +97,11 @@ class JLSSettingsComponent {
         }
     }
 
+    fun getQuoteStyle(): String {
+        return quoteStyleComboBox.selectedItem as String
+    }
+
+    fun setQuoteStyle(style: String) {
+        quoteStyleComboBox.selectedItem = style
+    }
 }
