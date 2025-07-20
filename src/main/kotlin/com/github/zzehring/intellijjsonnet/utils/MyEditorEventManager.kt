@@ -30,8 +30,20 @@ class MyEditorEventManager(
     fun reformat() {
         ApplicationUtils.pool {
             // Send the user's configured quote style to the LSP server
-            val quoteStyle = JLSSettingsStateComponent.instance.state.quoteStyle
-            val conf = mapOf("formatting" to mapOf("StringStyle" to quoteStyle))
+            val formatting = JLSSettingsStateComponent.instance.state.formatting
+            val conf = mapOf(
+                "formatting" to mapOf(
+                    "StringStyle" to formatting.quoteStyle,
+                    "CommentStyle" to formatting.commentStyle,
+                    "Indent" to formatting.indent,
+                    "MaxBlankLines" to formatting.maxBlankLines,
+                    "PrettyFieldNames" to formatting.prettyFieldNames,
+                    "UseImplicitPlus" to formatting.useImplicitPlus,
+                    "PadArrays" to formatting.padArrays,
+                    "PadObjects" to formatting.padObjects,
+                    "SortImports" to formatting.sortImports
+                )
+            )
             requestManager.didChangeConfiguration(DidChangeConfigurationParams(conf))
 
             if (editor.isDisposed) {

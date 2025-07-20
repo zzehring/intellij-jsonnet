@@ -38,7 +38,7 @@ class JLSSettingsConfigurable : Configurable {
                 || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
                 || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
                 || mySettingsComponent.getJPaths() != settings.jPaths
-                || mySettingsComponent.getQuoteStyle() != settings.quoteStyle
+                || mySettingsComponent.getFormatting() != settings.formatting
     }
 
     override fun apply() {
@@ -47,7 +47,7 @@ class JLSSettingsConfigurable : Configurable {
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
         settings.jPaths = mySettingsComponent.getJPaths()
-        settings.quoteStyle = mySettingsComponent.getQuoteStyle()
+        settings.formatting = mySettingsComponent.getFormatting()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -65,7 +65,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
         mySettingsComponent.setJPaths(settings.jPaths)
-        mySettingsComponent.setQuoteStyle(settings.quoteStyle)
+        mySettingsComponent.setFormatting(settings.formatting)
     }
 
 }
