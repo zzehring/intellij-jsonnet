@@ -4,7 +4,9 @@ import com.intellij.openapi.command.CommandProcessor
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
+import com.github.zzehring.intellijjsonnet.settings.JLSSettingsStateComponent
 import org.apache.commons.lang3.StringUtils
+import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.eclipse.lsp4j.DocumentFormattingParams
 import org.eclipse.lsp4j.FormattingOptions
 import org.eclipse.lsp4j.TextDocumentIdentifier
@@ -27,6 +29,23 @@ class MyEditorEventManager(
      */
     fun reformat() {
         ApplicationUtils.pool {
+            // Send the user's configured quote style to the LSP server
+            val formatting = JLSSettingsStateComponent.instance.state.formatting
+            val conf = mapOf(
+                "formatting" to mapOf(
+                    "StringStyle" to formatting.quoteStyle,
+                    "CommentStyle" to formatting.commentStyle,
+                    "Indent" to formatting.indent,
+                    "MaxBlankLines" to formatting.maxBlankLines,
+                    "PrettyFieldNames" to formatting.prettyFieldNames,
+                    "UseImplicitPlus" to formatting.useImplicitPlus,
+                    "PadArrays" to formatting.padArrays,
+                    "PadObjects" to formatting.padObjects,
+                    "SortImports" to formatting.sortImports
+                )
+            )
+            requestManager.didChangeConfiguration(DidChangeConfigurationParams(conf))
+
             if (editor.isDisposed) {
                 return@pool
             }
@@ -91,7 +110,7 @@ class MyEditorEventManager(
             var cur = 0
             while (cur < lspEdits.size - 1) {
                 val left = cur
-                while (lspEdits[cur].startOffset == lspEdits[cur+1].startOffset) {
+                while (lspEdits[cur].startOffset == lspEdits[cur + 1].startOffset) {
                     cur++
                 }
                 if (left < cur) {
