@@ -1,21 +1,23 @@
 package com.github.zzehring.intellijjsonnet.settings
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import com.intellij.openapi.components.StoragePathMacros
+import com.intellij.openapi.project.Project
 import org.jetbrains.annotations.Nullable
+import java.nio.file.InvalidPathException
+import java.nio.file.Paths
+import kotlin.text.isNotEmpty
 
+@Service(Service.Level.PROJECT)
 @State(
     name = "com.github.zzehring.intellijjsonnet.JLSSettingsState",
-    storages = [Storage("JsonnetLsSettingsPlugin.xml")]
+    // Store per-project. Use workspace.xml so machine-specific paths (like jpaths) are not shared via VCS.
+    storages = [Storage(StoragePathMacros.WORKSPACE_FILE)]
 )
-open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsStateComponent.SettingsState> {
-
-    companion object {
-        val instance: JLSSettingsStateComponent
-            get() = ApplicationManager.getApplication().getService(JLSSettingsStateComponent::class.java)
-    }
+class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsStateComponent.SettingsState> {
 
     var settingsState = SettingsState()
 
@@ -33,5 +35,27 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         var enableLintDiagnostics = false
         var enableEvalDiagnostics = false
         var jPaths = listOf<String>()
+        var extVars = mapOf<String, String>()
+        var extCodes = mapOf<String, String>()
+
+        fun asSettings(): Map<String, Any> {
+            return mapOf(
+                "resolve_paths_with_tanka" to true,
+                "enable_eval_diagnostics" to enableEvalDiagnostics,
+                "enable_lint_diagnostics" to enableLintDiagnostics,
+                "ext_vars" to extVars,
+                "ext_code" to extCodes,
+                "jpath" to jPaths.filter { it.isNotEmpty() && isValidPath(it) }
+            )
+        }
+
+        private fun isValidPath(path: String): Boolean {
+            return try {
+                Paths.get(path)
+                true
+            } catch (e: InvalidPathException) {
+                false
+            }
+        }
     }
 }
