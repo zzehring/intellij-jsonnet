@@ -44,6 +44,7 @@ class JLSSettingsConfigurable : Configurable {
         settings.releaseRepository = mySettingsComponent.getReleaseRepository()
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
+        settings.enableTankaMode = mySettingsComponent.getEnableTankaMode()
         settings.jPaths = mySettingsComponent.getJPaths()
     }
 
@@ -61,6 +62,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setReleaseRepository(settings.releaseRepository)
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
+        mySettingsComponent.setEnableTankaMode(settings.enableTankaMode)
         mySettingsComponent.setJPaths(settings.jPaths)
     }
 
