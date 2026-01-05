@@ -41,10 +41,11 @@ Additional plugin features:
 ---
 This project would not have been possible without the great work of the following projects:
 
-- [ballerina-platform/lsp4intellij](https://github.com/ballerina-platform/lsp4intellij)
-- [grafana/vscode-jsonnet](https://github.com/grafana/vscode-jsonnet)
-- [databricks/intellij-jsonnet](https://github.com/databricks/intellij-jsonnet)
-- [grafana/jsonnet-language-server](https://github.com/grafana/jsonnet-language-server)
+- [ballerina-platform/lsp4intellij](https://github.com/ballerina-platform/lsp4intellij) - Initial LSP integration
+- [redhat-developer/lsp4ij](https://github.com/redhat-developer/lsp4ij) - LSP client framework
+- [grafana/jsonnet-language-server](https://github.com/grafana/jsonnet-language-server) - Jsonnet LSP server
+- [grafana/vscode-jsonnet](https://github.com/grafana/vscode-jsonnet) - VS Code Jsonnet extension
+- [databricks/intellij-jsonnet](https://github.com/databricks/intellij-jsonnet) - Original IntelliJ plugin inspiration
 
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
