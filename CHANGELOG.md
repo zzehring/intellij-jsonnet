@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.3.5 - 2026-02-19
+
 ### Added
 - Make Tanka mode configurable via settings checkbox (PR #122)
 - Add eval_binary setting to configure external evaluation command (PR #121)
