@@ -4,6 +4,13 @@
 
 ## Unreleased
 
+### Added
+- Make Tanka mode configurable via settings checkbox (PR #122)
+- Add eval_binary setting to configure external evaluation command (PR #121)
+
+### Fixed
+- Pin plugin verifier to IntelliJ 2024.3 to resolve CI download failures (PR #123)
+
 ## 0.3.4 - 2025-05-05
 
 ### Changed
