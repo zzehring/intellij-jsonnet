@@ -21,6 +21,7 @@ class JLSSettingsComponent {
     private val releaseRepository = JBTextField()
     private val enableLintDiagnostics = JBCheckBox("Enable lint diagnostics on language server")
     private val enableEvalDiagnostics = JBCheckBox("Enable eval diagnostics on language")
+    private val enableTankaMode = JBCheckBox("Enable Tanka mode")
     private val jPathsTableModel = DefaultTableModel(arrayOf("JPath"), 0)
 
     init {
@@ -30,6 +31,8 @@ class JLSSettingsComponent {
             .addTooltip("Try to evaluate files to find errors and warnings. Disable on large projects to improve performance. IDE restart required.")
             .addComponent(enableLintDiagnostics)
             .addTooltip("Enable live linting diagnostics. Disable on large projects to improve performance. IDE restart required.")
+            .addComponent(enableTankaMode)
+            .addTooltip("Resolve import paths using Tanka conventions and enable Tanka native functions. Disable if not using Tanka. IDE restart required.")
             .panel
         val jPathsTable = JBTable(jPathsTableModel)
         val tablePanel = ToolbarDecorator.createDecorator(jPathsTable)
@@ -75,6 +78,14 @@ class JLSSettingsComponent {
 
     fun setEnableEvalDiagnostics(isSelected: Boolean) {
         enableEvalDiagnostics.isSelected = isSelected
+    }
+
+    fun getEnableTankaMode(): Boolean {
+        return enableTankaMode.isSelected
+    }
+
+    fun setEnableTankaMode(isSelected: Boolean) {
+        enableTankaMode.isSelected = isSelected
     }
 
     fun getJPaths(): List<String> {
