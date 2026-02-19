@@ -22,6 +22,7 @@ class JLSSettingsComponent {
     private val enableLintDiagnostics = JBCheckBox("Enable lint diagnostics on language server")
     private val enableEvalDiagnostics = JBCheckBox("Enable eval diagnostics on language")
     private val enableTankaMode = JBCheckBox("Enable Tanka mode")
+    private val evalBinary = JBTextField()
     private val jPathsTableModel = DefaultTableModel(arrayOf("JPath"), 0)
 
     init {
@@ -33,6 +34,17 @@ class JLSSettingsComponent {
             .addTooltip("Enable live linting diagnostics. Disable on large projects to improve performance. IDE restart required.")
             .addComponent(enableTankaMode)
             .addTooltip("Resolve import paths using Tanka conventions and enable Tanka native functions. Disable if not using Tanka. IDE restart required.")
+            .addVerticalGap(10)
+            .addLabeledComponent(
+                JBLabel("Eval Binary: "),
+                evalBinary, 1, true
+            )
+            .addTooltip(
+                "<html><body style='width: 500px'>" +
+                "External command for evaluation (e.g. \"jsonnet\" or \"tk\"). " +
+                "When set, file and expression evaluation use this command instead of the built-in VM." +
+                "</body></html>"
+            )
             .panel
         val jPathsTable = JBTable(jPathsTableModel)
         val tablePanel = ToolbarDecorator.createDecorator(jPathsTable)
@@ -87,6 +99,10 @@ class JLSSettingsComponent {
     fun setEnableTankaMode(isSelected: Boolean) {
         enableTankaMode.isSelected = isSelected
     }
+
+    fun getEvalBinary(): String = evalBinary.text
+
+    fun setEvalBinary(value: String) { evalBinary.text = value }
 
     fun getJPaths(): List<String> {
         val paths = mutableListOf<String>()

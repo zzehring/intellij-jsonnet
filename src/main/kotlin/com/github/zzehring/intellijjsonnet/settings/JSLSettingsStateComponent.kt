@@ -34,5 +34,6 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         var enableEvalDiagnostics = false
         var jPaths = listOf<String>()
         var enableTankaMode = true
+        var evalBinary = ""
     }
 }
