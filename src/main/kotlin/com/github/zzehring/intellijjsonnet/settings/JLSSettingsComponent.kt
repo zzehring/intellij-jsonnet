@@ -23,7 +23,6 @@ class JLSSettingsComponent {
     private val enableEvalDiagnostics = JBCheckBox("Enable eval diagnostics on language")
     private val enableTankaMode = JBCheckBox("Enable Tanka mode")
     private val evalBinary = JBTextField()
-    private val enableTankaMode = JBCheckBox("Enable Tanka mode")
     private val jPathsTableModel = DefaultTableModel(arrayOf("JPath"), 0)
 
     init {
