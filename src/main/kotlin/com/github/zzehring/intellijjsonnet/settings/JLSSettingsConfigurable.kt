@@ -59,7 +59,7 @@ class JLSSettingsConfigurable : Configurable {
                 val params = DidChangeConfigurationParams(
                     mapOf("eval_binary" to evalBinary)
                 )
-                wrapper.requestManager.didChangeConfiguration(params)
+                wrapper.requestManager?.didChangeConfiguration(params)
             }
         }
     }
