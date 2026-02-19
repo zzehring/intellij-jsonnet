@@ -99,12 +99,7 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            select {
-                types = listOf(IntelliJPlatformType.IntellijIdeaCommunity)
-                channels = listOf(ProductRelease.Channel.RELEASE)
-                sinceBuild = properties("pluginSinceBuild")
-                untilBuild = provider { null }
-            }
+            ide(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3")
         }
     }
 }
