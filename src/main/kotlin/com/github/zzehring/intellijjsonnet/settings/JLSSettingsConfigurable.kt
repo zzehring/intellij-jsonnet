@@ -1,8 +1,10 @@
 package com.github.zzehring.intellijjsonnet.settings
 
 import com.intellij.openapi.options.Configurable
+import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable
+import org.wso2.lsp4intellij.IntellijLanguageClient
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
@@ -37,6 +39,7 @@ class JLSSettingsConfigurable : Configurable {
                 || mySettingsComponent.getEnableEvalDiagnostics() != settings.enableEvalDiagnostics
                 || mySettingsComponent.getEnableLintDiagnostics() != settings.enableLintDiagnostics
                 || mySettingsComponent.getEnableTankaMode() != settings.enableTankaMode
+                || mySettingsComponent.getEvalBinary() != settings.evalBinary
                 || mySettingsComponent.getJPaths() != settings.jPaths
     }
 
@@ -46,7 +49,19 @@ class JLSSettingsConfigurable : Configurable {
         settings.enableEvalDiagnostics = mySettingsComponent.getEnableEvalDiagnostics()
         settings.enableLintDiagnostics = mySettingsComponent.getEnableLintDiagnostics()
         settings.enableTankaMode = mySettingsComponent.getEnableTankaMode()
+        settings.evalBinary = mySettingsComponent.getEvalBinary()
         settings.jPaths = mySettingsComponent.getJPaths()
+
+        // Send eval_binary to the running language server without requiring restart
+        val evalBinary = settings.evalBinary
+        IntellijLanguageClient.getProjectToLanguageWrappers().forEach { (_, wrappers) ->
+            wrappers.forEach { wrapper ->
+                val params = DidChangeConfigurationParams(
+                    mapOf("eval_binary" to evalBinary)
+                )
+                wrapper.requestManager.didChangeConfiguration(params)
+            }
+        }
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -64,6 +79,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setEnableEvalDiagnostics(settings.enableEvalDiagnostics)
         mySettingsComponent.setEnableLintDiagnostics(settings.enableLintDiagnostics)
         mySettingsComponent.setEnableTankaMode(settings.enableTankaMode)
+        mySettingsComponent.setEvalBinary(settings.evalBinary)
         mySettingsComponent.setJPaths(settings.jPaths)
     }
 
