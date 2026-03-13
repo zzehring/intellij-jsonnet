@@ -28,6 +28,18 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         settingsState = state
     }
 
+    data class FormattingConfiguration(
+        var quoteStyle: String = "leave",
+        var commentStyle: String = "leave",
+        var indent: Int = 2,
+        var maxBlankLines: Int = 2,
+        var prettyFieldNames: Boolean = true,
+        var useImplicitPlus: Boolean = true,
+        var padArrays: Boolean = false,
+        var padObjects: Boolean = true,
+        var sortImports: Boolean = true
+    )
+
     class SettingsState {
         var releaseRepository = "grafana/jsonnet-language-server"
         var enableLintDiagnostics = false
@@ -35,5 +47,6 @@ open class JLSSettingsStateComponent : PersistentStateComponent<JLSSettingsState
         var jPaths = listOf<String>()
         var enableTankaMode = true
         var evalBinary = ""
+        var formatting = FormattingConfiguration()
     }
 }

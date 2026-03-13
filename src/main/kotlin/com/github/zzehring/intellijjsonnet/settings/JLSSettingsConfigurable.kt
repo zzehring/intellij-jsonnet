@@ -19,6 +19,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent = JLSSettingsComponent()
         mySettingsComponent.setEnableLintDiagnostics(true)
         mySettingsComponent.setEnableEvalDiagnostics(false)
+
         val containerPanel = JPanel(GridBagLayout())
         val constraints = GridBagConstraints()
         constraints.fill = GridBagConstraints.HORIZONTAL
@@ -41,6 +42,7 @@ class JLSSettingsConfigurable : Configurable {
                 || mySettingsComponent.getEnableTankaMode() != settings.enableTankaMode
                 || mySettingsComponent.getEvalBinary() != settings.evalBinary
                 || mySettingsComponent.getJPaths() != settings.jPaths
+                || mySettingsComponent.getFormatting() != settings.formatting
     }
 
     override fun apply() {
@@ -62,6 +64,7 @@ class JLSSettingsConfigurable : Configurable {
                 wrapper.requestManager?.didChangeConfiguration(params)
             }
         }
+        settings.formatting = mySettingsComponent.getFormatting()
     }
 
     @Nls(capitalization = Nls.Capitalization.Title)
@@ -81,6 +84,7 @@ class JLSSettingsConfigurable : Configurable {
         mySettingsComponent.setEnableTankaMode(settings.enableTankaMode)
         mySettingsComponent.setEvalBinary(settings.evalBinary)
         mySettingsComponent.setJPaths(settings.jPaths)
+        mySettingsComponent.setFormatting(settings.formatting)
     }
 
 }
