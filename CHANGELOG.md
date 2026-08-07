@@ -4,12 +4,24 @@
 
 ## Unreleased
 
+### Changed
+- Migrate the LSP client from lsp4intellij to [LSP4IJ](https://github.com/redhat-developer/lsp4ij) (PR #120).
+  lsp4intellij is no longer actively maintained and relied on IntelliJ internal APIs; LSP4IJ is
+  actively maintained and uses only public platform APIs. It is installed automatically as a
+  plugin dependency.
+- The language server binary now lives in `~/.lsp4ij/lsp/jsonnet-language-server/` instead of the
+  plugin directory, and is managed through LSP4IJ's installer. It is re-downloaded once on upgrade.
+- Minimum supported IDE is now 2024.2 (build 242), up from 2023.3, as required by LSP4IJ.
+
 ### Added
 - Make Tanka mode configurable via settings checkbox (PR #122)
 - Add eval_binary setting to configure external evaluation command (PR #121)
+- Test coverage for parsing, folding, brace matching, commenting and code insight (PR #120)
 
 ### Fixed
 - Pin plugin verifier to IntelliJ 2024.3 to resolve CI download failures (PR #123)
+- `verifyPlugin` now fails the build on internal API usage rather than only reporting it
+- Formatting no longer needs the same-line edit-ordering workaround, which LSP4IJ handles natively
 
 ## 0.3.4 - 2025-05-05
 

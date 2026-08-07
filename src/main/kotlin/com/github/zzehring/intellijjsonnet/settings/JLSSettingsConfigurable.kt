@@ -1,10 +1,13 @@
 package com.github.zzehring.intellijjsonnet.settings
 
+import com.github.zzehring.intellijjsonnet.JSONNET_SERVER_ID
 import com.intellij.openapi.options.Configurable
+import com.intellij.openapi.project.ProjectManager
+import com.redhat.devtools.lsp4ij.LanguageServerManager
+import com.redhat.devtools.lsp4ij.ServerStatus
 import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.Nullable
-import org.wso2.lsp4intellij.IntellijLanguageClient
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
@@ -52,14 +55,18 @@ class JLSSettingsConfigurable : Configurable {
         settings.evalBinary = mySettingsComponent.getEvalBinary()
         settings.jPaths = mySettingsComponent.getJPaths()
 
-        // Send eval_binary to the running language server without requiring restart
-        val evalBinary = settings.evalBinary
-        IntellijLanguageClient.getProjectToLanguageWrappers().forEach { (_, wrappers) ->
-            wrappers.forEach { wrapper ->
-                val params = DidChangeConfigurationParams(
-                    mapOf("eval_binary" to evalBinary)
-                )
-                wrapper.requestManager?.didChangeConfiguration(params)
+        // Send eval_binary to the running language servers without requiring restart.
+        // This is an application-level Configurable, so fan out across every open project.
+        // Only already-started servers are notified: getLanguageServer() would otherwise
+        // start a server just because the user opened the settings dialog.
+        val params = DidChangeConfigurationParams(mapOf("eval_binary" to settings.evalBinary))
+        for (project in ProjectManager.getInstance().openProjects) {
+            val manager = LanguageServerManager.getInstance(project)
+            if (manager.getServerStatus(JSONNET_SERVER_ID) != ServerStatus.started) {
+                continue
+            }
+            manager.getLanguageServer(JSONNET_SERVER_ID).thenAccept { server ->
+                server?.workspaceService?.didChangeConfiguration(params)
             }
         }
     }

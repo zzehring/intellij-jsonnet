@@ -1,0 +1,7 @@
+{
+  outer: {
+    inner: {
+      value: "nested"
+    }
+  }
+}

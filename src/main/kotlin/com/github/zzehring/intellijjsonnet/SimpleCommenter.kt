@@ -8,11 +8,11 @@ class SimpleCommenter : Commenter {
     }
 
     override fun getBlockCommentPrefix(): String? {
-        return ""
+        return "/*"
     }
 
     override fun getBlockCommentSuffix(): String? {
-        return null
+        return "*/"
     }
 
     override fun getCommentedBlockCommentPrefix(): String? {

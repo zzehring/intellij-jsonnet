@@ -3,6 +3,7 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -16,8 +17,6 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.0.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
-    // Kotlin Serializer Plugin
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 }
 
 group = properties("pluginGroup")
@@ -26,26 +25,18 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://jitpack.io")
-    }
     intellijPlatform {
         defaultRepositories()
+        marketplace()
     }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-core:2.2.1")
-    implementation("io.ktor:ktor-client-cio:2.2.1")
-    implementation("net.swiftzer.semver:semver:1.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
-    implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
-    implementation("com.github.ballerina-platform:lsp4intellij:0.96.1")
-
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
+
+        // LSP4IJ plugin dependency for Language Server Protocol support
+        plugin("com.redhat.devtools.lsp4ij:0.20.1")
 
         instrumentationTools()
         zipSigner()
@@ -54,6 +45,10 @@ dependencies {
     }
 
     testImplementation("junit:junit:4.13.2")
+    // The platform test framework references opentest4j directly as of 2024.2, but does not
+    // put it on the test classpath. Without this, every test fails with NoClassDefFoundError
+    // on org.opentest4j.AssertionFailedError before it runs.
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
 }
 
 intellijPlatform {
@@ -98,7 +93,19 @@ intellijPlatform {
     }
 
     pluginVerification {
+        // Internal API usage is only *reported* by default, not failed on. v0.3.5 passed CI
+        // green and was then rejected by JetBrains Marketplace review for exactly that, so
+        // treat it as a build failure here instead of finding out after a release.
+        failureLevel = listOf(
+            VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
+            VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES,
+            VerifyPluginTask.FailureLevel.INVALID_PLUGIN,
+        )
+
         ides {
+            // Only one IDE can be listed here: Gradle conflict resolution collapses multiple
+            // ide() entries of the same type down to the highest version. Verifying the
+            // oldest supported build (242) too needs intellij-platform-gradle-plugin > 2.0.0.
             ide(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3")
         }
     }
