@@ -16,8 +16,6 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.0.0"
     // Gradle Changelog Plugin
     id("org.jetbrains.changelog") version "2.0.0"
-    // Kotlin Serializer Plugin
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.6.10"
 }
 
 group = properties("pluginGroup")
@@ -26,26 +24,18 @@ version = properties("pluginVersion")
 // Configure project's dependencies
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://jitpack.io")
-    }
     intellijPlatform {
         defaultRepositories()
+        marketplace()
     }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-core:2.2.1")
-    implementation("io.ktor:ktor-client-cio:2.2.1")
-    implementation("net.swiftzer.semver:semver:1.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.1")
-    implementation("org.jetbrains.kotlin:kotlin-native-utils:1.6.10")
-    implementation("com.github.ballerina-platform:lsp4intellij:0.96.1")
-
     intellijPlatform {
         create(properties("platformType"), properties("platformVersion"))
+
+        // LSP4IJ plugin dependency for Language Server Protocol support
+        plugin("com.redhat.devtools.lsp4ij:0.17.0")
 
         instrumentationTools()
         zipSigner()

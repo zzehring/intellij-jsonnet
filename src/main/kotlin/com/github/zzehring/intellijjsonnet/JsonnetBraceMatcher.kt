@@ -12,7 +12,7 @@ class JsonnetBraceMatcher : PairedBraceMatcher {
     }
 
     override fun isPairedBracesAllowedBeforeType(type: IElementType, tokenType: IElementType?): Boolean {
-        return false
+        return true
     }
 
     override fun getCodeConstructStart(file: PsiFile, openingBraceOffset: Int): Int {
