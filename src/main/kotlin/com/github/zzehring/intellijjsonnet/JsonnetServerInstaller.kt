@@ -14,6 +14,7 @@ import com.redhat.devtools.lsp4ij.installation.download.Reporter
 import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
@@ -120,7 +121,7 @@ class JsonnetServerInstaller : ServerInstallerBase() {
         val binaryFile = getBinaryFile()
 
         // Download the binary
-        downloadFile(URL(downloadUrl), binaryFile, indicator)
+        downloadFile(URI(downloadUrl).toURL(), binaryFile, indicator)
 
         // Set executable permissions
         setExecutablePermissions(binaryFile)
@@ -190,7 +191,7 @@ class JsonnetServerInstaller : ServerInstallerBase() {
 
     private fun getLatestVersion(owner: String, repo: String): String? {
         return try {
-            val url = URL("https://api.github.com/repos/$owner/$repo/releases/latest")
+            val url = URI("https://api.github.com/repos/$owner/$repo/releases/latest").toURL()
             val connection = url.openConnection() as HttpURLConnection
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json")
             connection.connectTimeout = 5000

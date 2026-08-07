@@ -1,5 +1,6 @@
 package com.github.zzehring.intellijjsonnet.actions
 
+import com.github.zzehring.intellijjsonnet.JSONNET_SERVER_ID
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.ActionUpdateThread
@@ -37,7 +38,7 @@ class EvaluateJsonnetAction : AnAction() {
 
             // Create command context and specify our language server
             val commandContext = LSPCommandContext(command, project)
-            commandContext.preferredLanguageServerId = "jsonnetLanguageServerId"
+            commandContext.preferredLanguageServerId = JSONNET_SERVER_ID
 
             // Execute the command
             CommandExecutor.executeCommand(commandContext)

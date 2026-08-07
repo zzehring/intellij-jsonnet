@@ -36,7 +36,7 @@ dependencies {
         create(properties("platformType"), properties("platformVersion"))
 
         // LSP4IJ plugin dependency for Language Server Protocol support
-        plugin("com.redhat.devtools.lsp4ij:0.17.0")
+        plugin("com.redhat.devtools.lsp4ij:0.20.1")
 
         instrumentationTools()
         zipSigner()
@@ -45,6 +45,10 @@ dependencies {
     }
 
     testImplementation("junit:junit:4.13.2")
+    // The platform test framework references opentest4j directly as of 2024.2, but does not
+    // put it on the test classpath. Without this, every test fails with NoClassDefFoundError
+    // on org.opentest4j.AssertionFailedError before it runs.
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
 }
 
 intellijPlatform {
@@ -99,6 +103,9 @@ intellijPlatform {
         )
 
         ides {
+            // Only one IDE can be listed here: Gradle conflict resolution collapses multiple
+            // ide() entries of the same type down to the highest version. Verifying the
+            // oldest supported build (242) too needs intellij-platform-gradle-plugin > 2.0.0.
             ide(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3")
         }
     }
