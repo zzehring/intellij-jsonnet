@@ -3,6 +3,7 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun properties(key: String) = project.findProperty(key).toString()
@@ -88,6 +89,15 @@ intellijPlatform {
     }
 
     pluginVerification {
+        // Internal API usage is only *reported* by default, not failed on. v0.3.5 passed CI
+        // green and was then rejected by JetBrains Marketplace review for exactly that, so
+        // treat it as a build failure here instead of finding out after a release.
+        failureLevel = listOf(
+            VerifyPluginTask.FailureLevel.COMPATIBILITY_PROBLEMS,
+            VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES,
+            VerifyPluginTask.FailureLevel.INVALID_PLUGIN,
+        )
+
         ides {
             ide(IntelliJPlatformType.IntellijIdeaCommunity, "2024.3")
         }
