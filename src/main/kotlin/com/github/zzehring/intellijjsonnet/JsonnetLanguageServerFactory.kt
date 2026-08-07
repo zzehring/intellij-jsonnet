@@ -7,6 +7,9 @@ import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
 import org.jetbrains.annotations.NotNull
 import org.jetbrains.annotations.Nullable
 
+/** Must match the `id` of the `com.redhat.devtools.lsp4ij.server` extension in plugin.xml. */
+const val JSONNET_SERVER_ID = "jsonnetLanguageServerId"
+
 class JsonnetLanguageServerFactory : LanguageServerFactory {
 
     override fun createConnectionProvider(@NotNull project: Project): StreamConnectionProvider {

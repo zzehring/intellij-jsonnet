@@ -26,10 +26,11 @@ class JsonnetLanguageServer(private val project: Project) : OSProcessStreamConne
         val settings = JLSSettingsStateComponent.instance.state
         val commandLine = GeneralCommandLine(binaryPath)
 
-        // Always add --tanka flag
-        commandLine.addParameter("--tanka")
-
         // Add optional flags based on settings
+        if (settings.enableTankaMode) {
+            commandLine.addParameter("--tanka")
+        }
+
         if (settings.enableEvalDiagnostics) {
             commandLine.addParameter("--eval-diags")
         }
