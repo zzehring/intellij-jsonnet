@@ -4,6 +4,8 @@
 
 ## Unreleased
 
+## 0.4.0 - 2026-08-07
+
 ### Changed
 - Migrate the LSP client from lsp4intellij to [LSP4IJ](https://github.com/redhat-developer/lsp4ij) (PR #120).
   lsp4intellij is no longer actively maintained and relied on IntelliJ internal APIs; LSP4IJ is
